@@ -54,9 +54,28 @@ function drawCircle(context,entity) {
         //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
-        stroke();                                
+
+        // make a smiley face :)
+        arc(x, y, 50, 0, Math.PI * 2, true); // Outer circle
+        moveTo(x+35, y);
+        arc(x, y, 35, 0, Math.PI, false);  // Mouth (clockwise)
+        moveTo(x-10, y-10);
+        arc(x-15, y-10, 5, 0, Math.PI * 2, true);  // Left eye
+        moveTo(x+20, y-10);
+        arc(x+15, y-10, 5, 0, Math.PI * 2, true);  // Right eye
+        stroke();
     }
+}
+
+function findRandomHexColor() {
+    const hexVals = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+    const val1 = hexVals[Math.floor(Math.random() * 16)];
+    const val2 = hexVals[Math.floor(Math.random() * 16)];
+    const val3 = hexVals[Math.floor(Math.random() * 16)];
+    const val4 = hexVals[Math.floor(Math.random() * 16)];
+    const val5 = hexVals[Math.floor(Math.random() * 16)];
+    const val6 = hexVals[Math.floor(Math.random() * 16)];
+    return ["#", val1, val2, val3, val4, val5, val6].join('');
 }
 
 function prepEntity(entity) {
@@ -123,8 +142,14 @@ function getPosition(e) {
 
 function addEntity(entity, data) {
     world[entity] = data;
+
+    //XXX: Send a XHTML (?) Request that updates the entity you just modified!
+    var dict = {
+        entity: data
+    };
+    // socket - no headers needed
+    socket.send(JSON.stringify(dict));
     drawNextFrame(); // (but should we?)
-    //XXX: Send a XHTML Request that updates the entity you just modified!
 }
 var counter = 0;
 function addEntityWithoutName(data) {
@@ -239,7 +264,7 @@ mouse.mouseuppers.push(function(x,y,clicked,e) {
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'green',
+    addEntityWithoutName({'x':x,'y':y,'colour':findRandomHexColor(),
                           'radius':10});
 });
 
