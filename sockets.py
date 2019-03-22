@@ -84,6 +84,7 @@ class Client:
 
 def set_listener( entity, data ):
     ''' do something with the update ! '''
+    # ???
 
 myWorld.add_set_listener( set_listener )
         
@@ -115,6 +116,7 @@ def subscribe_socket(ws):
     clients.append(client)
     g = gevent.spawn(read_ws, ws, client)
     try:
+        # ws.send(json.dumps(myWorld.world())) # send what we have so far?
         while True:
             # block here
             msg = client.get()
@@ -148,6 +150,11 @@ def update(entity):
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
+    if request.method == 'POST':
+        for entity_key, entity_value in flask_post_json():
+            for key, value in entity_value:
+                myWorld.update(entity_key, key, value)
+
     return json.dumps(myWorld.world())
 
 @app.route("/entity/<entity>")    

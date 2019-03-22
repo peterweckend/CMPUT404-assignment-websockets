@@ -7,6 +7,8 @@ See requirements.org (plain-text) for a description of the project.
 
 Make a shared state Websockets drawing program
 
+Created with the help of the socket examples linked to in class slides.
+
 Prereqs
 =======
 Create a virtual environment and install the required dependencies.
@@ -26,7 +28,7 @@ freetests.py is LICENSE'D under a BSD-like license:
 
 From ws4py
 
-Copyright (c) 2011-2014, Sylvain Hellegouarch, Abram Hindle
+Copyright (c) 2011-2014, Sylvain Hellegouarch, Abram Hindle, Peter Weckend
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

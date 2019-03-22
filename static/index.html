@@ -149,8 +149,22 @@ function addEntity(entity, data) {
     };
     // socket - no headers needed
     socket.send(JSON.stringify(dict));
-    drawNextFrame(); // (but should we?)
+    drawFrame(); // (but should we?)
 }
+
+function addEntityWithoutSending(entity, data) {
+    world[entity] = data;
+
+    //XXX: Send a XHTML (?) Request that updates the entity you just modified!
+    //var dict = {
+    //    entity: data
+    //};
+    // socket - no headers needed
+    // don't send the entity because we're receiving it
+    //{#socket.send(JSON.stringify(dict));#}
+    drawFrame();
+}
+
 var counter = 0;
 function addEntityWithoutName(data) {
     var name = "X"+(counter++)%100;
@@ -287,11 +301,13 @@ function wsSetup() {
         try {
             debug("WebSocket Recv:" + msg.data);
             //XXX: TODO What are you going to do here?
+
             var message = JSON.parse(msg.data);
             for (var key in message) {
-                addEntity(key, message[key]);
+                addEntityWithoutSending(key, message[key]);
+                drawNextFrame();
             }
-            drawNextFrame();
+
         } catch (e) {
             alert("socket on message: " + e);
         }
